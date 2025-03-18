@@ -1,25 +1,8 @@
-# Charger les bibliothèques nécessaires
-library(shiny)
 library(Rcpp)
+sourceCpp("takuzu.cpp")  # Assurez-vous que ce fichier est bien présent
+library(shiny)
 
-# ---- 1️⃣ Générer une grille Takuzu en C++ ----
-cppFunction('
-#include <Rcpp.h>
-using namespace Rcpp;
-
-// [[Rcpp::export]]
-IntegerMatrix generateTakuzu(int size) {
-    IntegerMatrix grid(size, size);
-    for (int row = 0; row < size; row++) {
-        for (int col = 0; col < size; col++) {
-            grid(row, col) = rand() % 2;  // Remplissage aléatoire 0 ou 1
-        }
-    }
-    return grid;
-}
-')
-
-# ---- 2️⃣ Interface Utilisateur (UI) ----
+# ---- Interface Utilisateur (UI) ----
 ui <- fluidPage(
   titlePanel("Jeu Takuzu - Shiny"),
   
@@ -36,23 +19,30 @@ ui <- fluidPage(
   )
 )
 
-# ---- 3️⃣ Serveur ----
+# ---- Serveur ----
 server <- function(input, output, session) {
   size <- 8  # Taille de la grille
+  fillRate <- 0.4  # Pourcentage de cases pré-remplies
   
-  # Générer une nouvelle grille Takuzu au démarrage
-  takuzu_grid <- reactiveVal(generateTakuzu(size))
+  # Grille réactive
+  initial_grid <- generateTakuzu(size, fillRate)
+  takuzu_grid <- reactiveVal(initial_grid)
   
-  # ---- 3️⃣.1 Afficher la grille ----
+  # ---- Affichage de la grille ----
   output$takuzu_ui <- renderUI({
     grid <- takuzu_grid()
     
-    # Création des boutons interactifs
     buttons <- lapply(1:size, function(row) {
       lapply(1:size, function(col) {
-        actionButton(inputId = paste0("cell_", row, "_", col),
-                     label = as.character(grid[row, col]),  # Afficher 0 ou 1
-                     class = "takuzu-btn")
+        cell_value <- grid[row, col]
+        inputId <- paste0("cell_", row, "_", col)
+        
+        actionButton(
+          inputId = inputId,
+          label = ifelse(cell_value == -1, " ", as.character(cell_value)),  # Afficher case vide
+          class = "takuzu-btn",
+          disabled = (initial_grid[row, col] != -1)  # Bloquer cases pré-remplies
+        )
       })
     })
     
@@ -62,27 +52,33 @@ server <- function(input, output, session) {
     }))
   })
   
-  # ---- 3️⃣.2 Gérer les clics de l'utilisateur ----
+  # ---- Gestion des clics de l'utilisateur ----
   observe({
     for (row in 1:size) {
       for (col in 1:size) {
         local({
           r <- row
           c <- col
-          observeEvent(input[[paste0("cell_", r, "_", c)]], {
-            grid <- isolate(takuzu_grid())  # Ne pas recalculer toute la grille
-            grid[r, c] <- ifelse(grid[r, c] == 0, 1, 0)  # Inversion 0 ⇄ 1
-            takuzu_grid(grid)  # Mise à jour réactive
+          input_id <- paste0("cell_", r, "_", c)
+          
+          observeEvent(input[[input_id]], {
+            grid <- isolate(takuzu_grid())  
             
-            # Mise à jour de l'affichage du bouton
-            updateActionButton(session, paste0("cell_", r, "_", c), label = as.character(grid[r, c]))
+            # Seules les cases vides doivent être modifiables
+            if (initial_grid[r, c] == -1) {  
+              grid[r, c] <- ifelse(grid[r, c] == 1, 0, 1)  # Alternance 0 ⇄ 1
+              takuzu_grid(grid)  
+              
+              # Mettre à jour l'affichage du bouton
+              updateActionButton(session, input_id, label = as.character(grid[r, c]))
+            }
           }, ignoreNULL = TRUE)
         })
       }
     }
   })
   
-  # ---- 3️⃣.3 Vérifier la solution et indiquer les erreurs ----
+  # ---- Vérification de la solution ----
   observeEvent(input$check_solution, {
     grid <- takuzu_grid()
     
@@ -91,7 +87,7 @@ server <- function(input, output, session) {
     
     # Vérifier chaque ligne et colonne
     for (i in 1:size) {
-      # Règle 1: Chaque ligne et colonne doit avoir 50% de 0 et 50% de 1
+      # Règle 1: Chaque ligne et colonne doit contenir 50% de 0 et 50% de 1
       if (sum(grid[i, ] == 0) != size / 2 || sum(grid[i, ] == 1) != size / 2) {
         invalid_rows <- c(invalid_rows, i)
       }
@@ -99,7 +95,7 @@ server <- function(input, output, session) {
         invalid_cols <- c(invalid_cols, i)
       }
       
-      # Règle 2: Pas plus de 2 chiffres identiques consécutifs dans une ligne ou colonne
+      # Règle 2: Pas plus de 2 chiffres identiques consécutifs
       if (any(rle(grid[i, ])$lengths >= 3)) {
         invalid_rows <- c(invalid_rows, i)
       }
@@ -108,7 +104,7 @@ server <- function(input, output, session) {
       }
     }
     
-    # Génération du message d'erreur
+    # Génération du message de validation
     if (length(invalid_rows) == 0 && length(invalid_cols) == 0) {
       output$result <- renderText("🎉 Bravo ! Grille correcte !")
     } else {
@@ -123,11 +119,13 @@ server <- function(input, output, session) {
     }
   })
   
-  # ---- 3️⃣.4 Générer une nouvelle grille ----
+  # ---- Générer une nouvelle grille ----
   observeEvent(input$new_game, {
-    takuzu_grid(generateTakuzu(size))  # Nouvelle grille
+    new_grid <- generateTakuzu(size, fillRate)
+    takuzu_grid(new_grid)  # Mettre à jour la grille
+    initial_grid <<- new_grid  # Mémoriser les nouvelles valeurs initiales
   })
 }
 
-# ---- 4️⃣ Lancer l'application ----
+# ---- Lancer l'application ----
 shinyApp(ui, server)
