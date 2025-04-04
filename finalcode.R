@@ -77,8 +77,12 @@ background-color: #6a1b9a !important;
         border-radius: 10px;
         padding: 20px;
         margin: 20px 0;
-        max-width: 600px;
+        max-width: 700px;
       }
+      .rules-panel ul li {
+  font-size: 1.2em;  /* Taille augmentée pour les items */
+  color: white;
+}
       .start-btn {
         font-size: 1.2em;
         padding: 10px 30px;
@@ -97,7 +101,13 @@ background-color: #6a1b9a !important;
       }
       .takuzu-title {
   color: white;
-  font-size: 2em;
+  font-size: 1em;
+  font-weight: bold;
+    text-align: center;
+      }
+    .takuzu {
+  color: white;
+  font-size: 4em;
   font-weight: bold;
     text-align: center;
 }
@@ -127,7 +137,7 @@ background-color: #6a1b9a !important;
   
   div(
     id = "welcome_page",
-    h1("Jeu Takuzu"),
+    h1("Jeu Takuzu",class="takuzu"),
     div(
       class = "rules-panel",
       h3("Règles du jeu :"),
