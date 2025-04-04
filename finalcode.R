@@ -95,6 +95,12 @@ background-color: #6a1b9a !important;
         background-color: #6e8efb !important;
         color: white !important;
       }
+      .takuzu-title {
+  color: white;
+  font-size: 2em;
+  font-weight: bold;
+    text-align: center;
+}
       .takuzu-btn {
         width: 50px !important;
         height: 50px !important;
@@ -147,7 +153,7 @@ background-color: #6a1b9a !important;
   hidden(
     div(
       id = "game_page",
-      titlePanel("Jeu Takuzu"),
+      titlePanel(div(class = "takuzu-title", "Jeu Takuzu")),
       sidebarLayout(
         sidebarPanel(
           actionButton("back_to_menu", "Retour au menu", class = "btn-primary btn-block"),
