@@ -1,0 +1,25 @@
+Package: takuzuGame
+Title: Interactive Takuzu Logic Puzzle Game
+Version: 0.0.0.9000
+Authors@R: 
+    c(person("Samira MAMANE SIDI", email = "samira.mamane-sidi@etu.umontpellier.fr", role = c("aut", "cre")),
+      person("Rokhaya MBAYE", email = "rokhaya.mbaye@etu.umontpellier.fr", role = c("aut")))
+Description: Cette application Shiny propose une version interactive du jeu Takuzu (également connu sous le nom de Binairo), un jeu de logique basé sur une grille à remplir avec des 0 et des 1. L'objectif est de compléter la grille en respectant trois règles principales : chaque ligne et chaque colonne doit contenir autant de 0 que de 1, il ne peut pas y avoir plus de deux chiffres identiques consécutifs horizontalement ou verticalement, et aucune ligne ou colonne ne peut être identique à une autre. L'application permet à l'utilisateur de générer des grilles de Takuzu de différentes tailles, de résoudre les grilles manuellement via une interface intuitive, de vérifier la validité de sa solution à tout moment, ou encore d'obtenir une solution automatique générée par l'algorithme intégré. Ce jeu est idéal pour s'entraîner à la logique de manière ludique, directement dans l'environnement R via une interface web légère et réactive.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+LinkingTo: 
+    Rcpp
+Imports: 
+    Rcpp,
+    shiny,
+    shinyjs,
+    utils,
+    methods
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Config/testthat/edition: 3
+VignetteBuilder: knitr
