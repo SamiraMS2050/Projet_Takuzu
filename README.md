@@ -22,7 +22,7 @@ Vous pouvez installer **takuzuGame** directement GitHub.
 install.packages("devtools")
 
 # Installer le package depuis GitHub
-devtools::install_github("votre_nom_utilisateur/takuzuGame")
+devtools::install_github("SamiraMS2050/Projet_Takuzu")
 ```
 ## Utilisation 
 
