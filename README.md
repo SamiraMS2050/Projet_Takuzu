@@ -35,7 +35,7 @@ library(takuzuGame)
 ```
 2.	Lancez l’application Shiny avec la fonction run_App() :
 ```r
-run_App()
+run_app()
 ```
 Cela ouvrira l’application Shiny dans votre navigateur ou dans un panneau intégré de RStudio, selon votre configuration.
 ## Jouer au jeu 
