@@ -45,7 +45,7 @@ Une fois l’application lancée, vous pourrez interagir avec la grille de Takuz
 ##  Dépannage
 
 •	Si l’application ne se lance pas, vérifiez que vous avez bien installé les dépendances nécessaires (comme Shiny).
-	•	Si vous rencontrez une erreur spécifique, consultez la section “Issues” sur GitHub pour des solutions ou posez une question.
+•	Si vous rencontrez une erreur spécifique, consultez la section “Issues” sur GitHub pour des solutions ou posez une question.
  ## Licence
 
 Ce package est sous licence MIT.
