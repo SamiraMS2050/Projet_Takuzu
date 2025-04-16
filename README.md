@@ -19,7 +19,7 @@ Vous pouvez installer **takuzuGame** directement via GitHub.
 
 ```r
 # Installer ces packages d'abord
-install.packages(c("devtools","shiny","shinyjs","Rcpp")
+install.packages(c("devtools","shiny","shinyjs","Rcpp"))
 
 # Installer le package depuis GitHub
 devtools::install_github("SamiraMS2050/Projet_Takuzu")
