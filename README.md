@@ -13,13 +13,13 @@ Avant de commencer, assurez-vous que vous avez installé R et RStudio sur votre 
 
 ### Installation de `takuzuGame`
 
-Vous pouvez installer **takuzuGame** directement GitHub.
+Vous pouvez installer **takuzuGame** directement via GitHub.
 
 #### Installation depuis Github
 
 ```r
-# Installer devtools si ce n'est pas déjà fait
-install.packages("devtools")
+# Installer ces packages d'abord
+install.packages(c("devtools","shiny","shinyjs","Rcpp")
 
 # Installer le package depuis GitHub
 devtools::install_github("SamiraMS2050/Projet_Takuzu")
