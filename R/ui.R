@@ -178,6 +178,7 @@ background-color: #6a1b9a !important;
             actionButton("back_to_menu", "Retour au menu", class = "btn-primary btn-block"),
             actionButton("new_game", "Nouvelle Grille", class = "btn-primary btn-block"),
             hr(),
+             actionButton("show_strategy", "Stratégie", class = "btn-info btn-block"),
             wellPanel(
               h4("Vérification"),
               selectInput("check_type", "Type:",
