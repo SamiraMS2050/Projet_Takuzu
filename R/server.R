@@ -599,6 +599,23 @@ takuzuServer <- function(input, output, session) {
     valid_cols(rep(TRUE, current_size))
     output$result <- renderText("Solution affichée")
   })
+   observeEvent(input$show_strategy, {
+    showModal(modalDialog(
+      title = "Stratégies pour Takuzu",
+      HTML("
+      <ul>
+        <li>Évitez les suites de trois chiffres identiques : si vous voyez deux 0 ou deux 1 côte à côte, la case suivante doit forcément être remplie avec l'autre chiffre.</li>
+        <li>Veillez à l’équilibre entre 0 et 1 : chaque ligne et chaque colonne doit contenir autant de 0 que de 1. Dès qu’un chiffre est déjà trop présent, complétez les cases restantes avec l’autre.</li>
+        <li>Comparez les lignes et les colonnes : si une ligne ou une colonne est presque remplie et ressemble beaucoup à une autre déjà terminée, ajustez les dernières cases pour qu’elles restent différentes.</li>
+      </ul>
+      <p>Utilisez ces astuces pour progresser dans la résolution de la grille !</p>
+    "),
+      easyClose = TRUE,
+      footer = NULL
+    ))
+  })
+  
+  
 
   #' @keywords internal
   #' Gestion du bouton nouvelle partie
